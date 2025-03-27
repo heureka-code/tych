@@ -42,6 +42,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Check and document
         run: |
+          cd interface
           cargo check
 
           cargo doc --no-deps -p abstraction
@@ -52,10 +53,12 @@ jobs:
           cargo doc --no-deps -p cli
           cargo doc --no-deps -p output
           cargo doc --no-deps -p tych 
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=tych\">" > target/doc/index.html
+
+          cd ..
 
           rm -rf ./docs
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=tych\">" > target/doc/index.html
-          cp -r target/doc ./docs
+          cp -r interface/target/doc ./docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
