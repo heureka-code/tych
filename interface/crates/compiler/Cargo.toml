@@ -1,0 +1,16 @@
+[package]
+name = "compiler"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = { workspace = true }
+lazy_static = { workspace = true }
+pest = { workspace = true }
+thiserror = { workspace = true }
+
+regex = "1.11.1"
+tempfile = "3.18.0"
+
+abstraction = { path = "../abstraction" }
+model = { path = "../model" }

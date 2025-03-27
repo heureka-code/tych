@@ -1,0 +1,15 @@
+[package]
+name = "abstraction"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = { workspace = true }
+pest = { workspace = true }
+
+paste = { version = "1", optional = true }
+
+[features]
+default = [ "paste" ]
+paste = [ "dep:paste" ]
+

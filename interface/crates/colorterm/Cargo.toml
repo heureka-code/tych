@@ -1,0 +1,8 @@
+[package]
+name = "colorterm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+atty = "0.2"
+lazy_static = { workspace = true }

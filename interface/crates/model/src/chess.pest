@@ -1,0 +1,110 @@
+MultiExecutionResult = { "MultiExecutionResult" ~ "<" ~ SingleExecutionStepContainer ~ "," ~ Situation ~ ">" }
+
+SingleExecutionStepContainer = { "Container" ~ "<" ~ (SingleExecutionStep ~ ("," ~ SingleExecutionStep)*)? ~ ">" }
+SingleExecutionStep = {
+    "SingleExecutionStep" ~ "<" ~
+        Situation ~ "," ~
+        AnyMove ~ "," ~
+        Situation ~ "," ~
+        SituationAnalysisResult ~ "," ~
+        ResValidation ~
+    ">"
+}
+
+
+SituationAnalysisResult = { "SituationAnalysisResult" ~ "<" ~ Boolean ~ "," ~ Boolean ~ "," ~ OptMoveContainer ~ ">" }
+Situation = { "Situation" ~ "<" ~ Board ~ "," ~ MoveContainer ~ "," ~ SituationFlags ~ "," ~ Color ~ ">" }
+SituationFlags = { "SituationFlags" ~ "<" ~ CastlingRightFlags ~ ">" }
+
+OptMoveContainer = _{ SomeMoveContainer | None }
+SomeMoveContainer = { "Some" ~ "<" ~ MoveContainer ~ ">" }
+MoveContainer = { "Container" ~ "<" ~ (AnyMove ~ ("," ~ AnyMove)*)? ~ ">" }
+
+AnyMove = _{ ColoredCastlingMove | CastlingMove | NormalMove }
+NormalMove = { "NormalMove" ~ "<" ~ ColoredPiece ~ "," ~ Square ~ "," ~ Boolean ~ "," ~ Square ~ "," ~ OptKind ~ ">" }
+ColoredCastlingMove = { "ColoredCastlingMove" ~ "<" ~ Color ~ "," ~ CastlingMove ~ ">" }
+CastlingMove = { "CastlingMove" ~ "<" ~ CastlingKind ~ ">" }
+
+CastlingKind = _{ CastlingKindQueenside | CastlingKindKingside }
+CastlingKindKingside = { "Kingside" }
+CastlingKindQueenside = { "Queenside" }
+
+CastlingRightFlags = { "CastlingRightFlags" ~ "<" ~ CastlingRight ~ "," ~ CastlingRight ~ ">" }
+CastlingRight = { "CastlingRight" ~ "<" ~ Boolean ~ "," ~ Boolean ~ ">" }
+
+Board = { "Board" ~ "<" ~ (PlacedPiece ~ ("," ~ PlacedPiece)*)? ~ ">" }
+
+PlacedPiece = { "PlacedPiece" ~ "<" ~ ColoredPiece ~ "," ~ Square ~ ">" }
+ColoredPiece = { "ColoredPiece" ~ "<" ~ Color ~ "," ~ Kind ~ ">" }
+
+OptKind = _{ SomeKind | None }
+SomeKind = { "Some" ~ "<" ~ Kind ~ ">" }
+Kind = _{ KindPawn | KindKing | KindQueen | KindRook | KindBishop | KindKnight }
+KindPawn = { "Pawn" }
+KindKing = { "King" }
+KindQueen = { "Queen" }
+KindRook = { "Rook" }
+KindBishop = { "Bishop" }
+KindKnight = { "Knight" }
+
+ResValidation = _{ OkUnit | ErrValidationFailure }
+ErrValidationFailure = { "Err" ~ "<" ~ ValidationFailure ~ ">"}
+ValidationFailure = _{
+        ValidationFailureCaptureDeclarationNotMatchingBoard
+    |   ValidationFailureWrongPlayersTurn
+    |   ValidationFailureOnlyPawnsCanGetPromoted
+    |   ValidationFailureValueIsNoValidPromotionTargetKind
+    |   ValidationFailurePromotionDeclarationDoesntMatchPieceMovement
+    |   ValidationFailurePieceSquareCombinationNotFoundOnBoard
+    |   ValidationFailureTargetIsOwnPiece
+    |   ValidationFailurePieceCantMoveToThisSquare
+    |   ValidationFailureMoveWouldLeavePlayerInCheck
+    |   ValidationFailureCantCastleWhileInCheck
+    |   ValidationFailureCantCastleThroughCheck
+    |   ValidationFailureNoRookForCastlingFoundOnCorrectPosition
+    |   ValidationFailureNoKingForCastlingFoundOnCorrectPosition
+    |   ValidationFailurePlayerHasNotTheRightToCastleThisWay
+    |   ValidationFailureNeededSquaresForCastlingAreNotFree
+}
+
+ValidationFailureCaptureDeclarationNotMatchingBoard = { "CaptureDeclarationNotMatchingBoard" }
+ValidationFailureWrongPlayersTurn = { "WrongPlayersTurn" ~ "<" ~ Color ~ ">" }
+ValidationFailureOnlyPawnsCanGetPromoted = { "OnlyPawnsCanGetPromoted" }
+ValidationFailureValueIsNoValidPromotionTargetKind = { "ValueIsNoValidPromotionTargetKind" }
+ValidationFailurePromotionDeclarationDoesntMatchPieceMovement = { "PromotionDeclarationDoesntMatchPieceMovement" }
+ValidationFailurePieceSquareCombinationNotFoundOnBoard = { "PieceSquareCombinationNotFoundOnBoard" }
+ValidationFailureTargetIsOwnPiece = { "TargetIsOwnPiece" }
+ValidationFailurePieceCantMoveToThisSquare = { "PieceCantMoveToThisSquare" }
+ValidationFailureMoveWouldLeavePlayerInCheck = { "MoveWouldLeavePlayerInCheck" }
+ValidationFailureCantCastleWhileInCheck = { "CantCastleWhileInCheck" }
+ValidationFailureCantCastleThroughCheck = { "CantCastleThroughCheck" }
+ValidationFailureNoRookForCastlingFoundOnCorrectPosition = { "NoRookForCastlingFoundOnCorrectPosition" }
+ValidationFailureNoKingForCastlingFoundOnCorrectPosition = { "NoKingForCastlingFoundOnCorrectPosition" }
+ValidationFailurePlayerHasNotTheRightToCastleThisWay = { "PlayerHasNotTheRightToCastleThisWay" }
+ValidationFailureNeededSquaresForCastlingAreNotFree = { "NeededSquaresForCastlingAreNotFree" }
+
+Color = _{ ColorWhite | ColorBlack }
+ColorWhite = { "White" }
+ColorBlack = { "Black" }
+
+Square = { "Square" ~ "<" ~ File ~ "," ~ Row ~ ">" }
+File = ${ "file_" ~ LetterAToH }
+Row = ${ "row_" ~ Number1to8 }
+
+Boolean = _{ BooleanTrue | BooleanFalse }
+BooleanTrue = { "True" }
+BooleanFalse = { "False" }
+
+OkUnit = { "Ok" ~ "<" ~ Unit ~ ">" }
+Unit = { "Unit" }
+None = { "None" }
+
+// GENERAL
+
+WHITESPACE = _{" " | "\n"}
+
+LetterAToH = { 'a'..'h' }
+Number1to8 = { '1'..'8' }
+
+Identifier = { (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+

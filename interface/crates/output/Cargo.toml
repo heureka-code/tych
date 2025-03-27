@@ -1,0 +1,12 @@
+[package]
+name = "output"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+model = { path = "../model" }
+colorterm = { path = "../colorterm" }
+cli = { path = "../cli" }
+
+itertools = { workspace = true }
+

@@ -1,0 +1,15 @@
+[package]
+name = "abstraction-derive"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+syn = "2.0.100"
+quote = "1"
+proc-macro2 = "1"
+either = "1"
+itertools = { workspace = true }
+
+[lib]
+proc-macro = true
+

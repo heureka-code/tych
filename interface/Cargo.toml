@@ -1,0 +1,34 @@
+[package]
+name = "tych"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+compiler = { path = "crates/compiler" }
+model = { path = "crates/model" }
+output = { path = "crates/output" }
+cli = { path = "crates/cli" }
+
+# only here for usage in documentation comments
+abstraction-derive = { path = "crates/abstraction-derive" }
+colorterm = { path = "crates/colorterm" }
+abstraction = { path = "crates/abstraction" }
+
+[workspace.dependencies]
+itertools = "0.14.0"
+pest = "2.7.15"
+pest_derive = "2.7.15"
+lazy_static = "1.5.0"
+thiserror = "2.0.12"
+
+[workspace]
+members = [
+    "crates/compiler",
+    "crates/abstraction-derive", 
+    "crates/abstraction", 
+    "crates/model", 
+    "crates/colorterm", 
+    "crates/output", 
+    "crates/cli"
+]
+
