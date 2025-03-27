@@ -53,6 +53,7 @@ jobs:
           cargo doc --no-deps -p cli
           cargo doc --no-deps -p output
           cargo doc --no-deps -p tych 
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=tych\">" > target/doc/index.html
 
           cd ..
 
